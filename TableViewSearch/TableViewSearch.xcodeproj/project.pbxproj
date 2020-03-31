@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B1390D80243254A600ADB739 /* datanames.json in Resources */ = {isa = PBXBuildFile; fileRef = B1390D7F243254A600ADB739 /* datanames.json */; };
 		B13C3AD6242BC75A00EFE3C3 /* Section.m in Sources */ = {isa = PBXBuildFile; fileRef = B13C3AD5242BC75A00EFE3C3 /* Section.m */; };
 		B150CCDD242A7B0F00F1A973 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B150CCDC242A7B0F00F1A973 /* AppDelegate.m */; };
 		B150CCE0242A7B0F00F1A973 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B150CCDF242A7B0F00F1A973 /* SceneDelegate.m */; };
@@ -18,6 +19,8 @@
 		B150CCF8242A7B1100F1A973 /* TableViewSearchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B150CCF7242A7B1100F1A973 /* TableViewSearchTests.m */; };
 		B150CD03242A7B1100F1A973 /* TableViewSearchUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = B150CD02242A7B1100F1A973 /* TableViewSearchUITests.m */; };
 		B150CD15242A7E3A00F1A973 /* NSString+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = B150CD14242A7E3A00F1A973 /* NSString+Random.m */; };
+		B1CBE13B242E3ADD0066C377 /* Student.m in Sources */ = {isa = PBXBuildFile; fileRef = B1CBE13A242E3ADD0066C377 /* Student.m */; };
+		B1CBE13F242E3FED0066C377 /* StudentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B1CBE13E242E3FED0066C377 /* StudentCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B1390D7F243254A600ADB739 /* datanames.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = datanames.json; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.json; };
 		B13C3AD4242BC75A00EFE3C3 /* Section.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Section.h; sourceTree = "<group>"; };
 		B13C3AD5242BC75A00EFE3C3 /* Section.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Section.m; sourceTree = "<group>"; };
 		B150CCD8242A7B0F00F1A973 /* TableViewSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TableViewSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +64,10 @@
 		B150CD04242A7B1100F1A973 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B150CD13242A7E3A00F1A973 /* NSString+Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Random.h"; sourceTree = "<group>"; };
 		B150CD14242A7E3A00F1A973 /* NSString+Random.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Random.m"; sourceTree = "<group>"; };
+		B1CBE139242E3ADD0066C377 /* Student.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Student.h; sourceTree = "<group>"; };
+		B1CBE13A242E3ADD0066C377 /* Student.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Student.m; sourceTree = "<group>"; };
+		B1CBE13D242E3FED0066C377 /* StudentCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StudentCell.h; sourceTree = "<group>"; };
+		B1CBE13E242E3FED0066C377 /* StudentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StudentCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +118,7 @@
 		B150CCDA242A7B0F00F1A973 /* TableViewSearch */ = {
 			isa = PBXGroup;
 			children = (
+				B1CBE13C242E3FC00066C377 /* Models */,
 				B150CCDB242A7B0F00F1A973 /* AppDelegate.h */,
 				B150CCDC242A7B0F00F1A973 /* AppDelegate.m */,
 				B150CCDE242A7B0F00F1A973 /* SceneDelegate.h */,
@@ -123,8 +132,7 @@
 				B150CCED242A7B1100F1A973 /* main.m */,
 				B150CD13242A7E3A00F1A973 /* NSString+Random.h */,
 				B150CD14242A7E3A00F1A973 /* NSString+Random.m */,
-				B13C3AD4242BC75A00EFE3C3 /* Section.h */,
-				B13C3AD5242BC75A00EFE3C3 /* Section.m */,
+				B1390D7F243254A600ADB739 /* datanames.json */,
 			);
 			path = TableViewSearch;
 			sourceTree = "<group>";
@@ -145,6 +153,19 @@
 				B150CD04242A7B1100F1A973 /* Info.plist */,
 			);
 			path = TableViewSearchUITests;
+			sourceTree = "<group>";
+		};
+		B1CBE13C242E3FC00066C377 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B13C3AD4242BC75A00EFE3C3 /* Section.h */,
+				B13C3AD5242BC75A00EFE3C3 /* Section.m */,
+				B1CBE139242E3ADD0066C377 /* Student.h */,
+				B1CBE13A242E3ADD0066C377 /* Student.m */,
+				B1CBE13D242E3FED0066C377 /* StudentCell.h */,
+				B1CBE13E242E3FED0066C377 /* StudentCell.m */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -250,6 +271,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1390D80243254A600ADB739 /* datanames.json in Resources */,
 				B150CCEB242A7B1100F1A973 /* LaunchScreen.storyboard in Resources */,
 				B150CCE8242A7B1100F1A973 /* Assets.xcassets in Resources */,
 				B150CCE6242A7B0F00F1A973 /* Main.storyboard in Resources */,
@@ -281,8 +303,10 @@
 				B150CCDD242A7B0F00F1A973 /* AppDelegate.m in Sources */,
 				B150CCEE242A7B1100F1A973 /* main.m in Sources */,
 				B150CD15242A7E3A00F1A973 /* NSString+Random.m in Sources */,
+				B1CBE13B242E3ADD0066C377 /* Student.m in Sources */,
 				B150CCE0242A7B0F00F1A973 /* SceneDelegate.m in Sources */,
 				B13C3AD6242BC75A00EFE3C3 /* Section.m in Sources */,
+				B1CBE13F242E3FED0066C377 /* StudentCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

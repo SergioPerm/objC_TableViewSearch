@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface Section : NSObject
 
 @property (strong, nonatomic) NSString* sectionName;
-@property (strong, nonatomic) NSMutableArray* nameArr;
+@property (assign, nonatomic) int indexSectionForDate;
+@property (strong, nonatomic) NSMutableArray* studentsArr;
 
 @end
 

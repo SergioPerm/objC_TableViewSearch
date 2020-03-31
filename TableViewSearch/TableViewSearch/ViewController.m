@@ -9,6 +9,14 @@
 #import "ViewController.h"
 #import "NSString+Random.h"
 #import "Section.h"
+#import "StudentCell.h"
+#import "Student.h"
+
+typedef enum {
+    nameSectionType        = 1,
+    lastNameSectionType    = 2,
+    monthBirthSectionType  = 3
+} StudentSectionType;
 
 @interface ViewController ()
 
@@ -18,35 +26,100 @@
 @property (strong, nonatomic) NSOperation* currentOperation;
 @property (strong, nonatomic) NSOperationQueue* queue;
 
+@property (strong, nonatomic) NSMutableArray* studentsArray;
+
+@property (assign, nonatomic) int currentSectionType;
+
 @end
 
 @implementation ViewController
+
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+        
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.namesArr = @[@"aaa", @"bbb", @"ccc"];
+    self.tableSearchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
+    self.tableSearchBar.delegate = self;
+    self.tableView.tableHeaderView = self.tableSearchBar;
     
-    NSMutableArray* array = [NSMutableArray array];
+    self.studentsArray = [[NSMutableArray alloc] init];
     
-    for (int i = 0; i < 200000; i++) {
-        [array addObject:[[NSString randomAlphanumericString] capitalizedString]];
+    NSDictionary* testNames = [self JSONFromFile];
+    
+    for (NSDictionary* nameDict in testNames) {
+        
+        NSString* fullName = [nameDict objectForKey:@"name"];
+        
+        NSArray* fullNameArr = [fullName componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        Student* student = [[Student alloc] init];
+        student.firstName = [fullNameArr objectAtIndex:1];
+        student.lastName = [fullNameArr objectAtIndex:0];
+        
+        NSUInteger rndValue = 5 + arc4random() % ((365*25) - 5);
+        
+        student.birthDate = [self generateRandomDateWithinDaysBeforeSpecDay:rndValue];
+        student.birthMonth = [self getMonthAsIntFromDate:student.birthDate];
+        student.strBirthMonth = [self getMonthAsStringFromDate:student.birthDate];
+        
+        [self.studentsArray addObject:student];
+        
     }
+              
+//    [self.studentsArray sortUsingDescriptors:@[
+//        [NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES],
+//        [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES],
+//        [NSSortDescriptor sortDescriptorWithKey:@"birthDate" ascending:YES]
+//    ]];
     
-    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"self" ascending:YES];
-    [array sortUsingDescriptors:@[sortDescriptor]];
-    
-    self.namesArr = array;
-    //self.sectionsArray = [[NSMutableArray alloc] initWithArray:[self generateSectionsFromArray:self.namesArr withFilter:self.tableSearchBar.text]];
-    
-    [self generateSectionsInBackgroundFromArray:self.namesArr withFilter:self.tableSearchBar.text];
+    self.currentSectionType = nameSectionType;
+    [self generateSectionsInBackgroundFromArray:self.studentsArray withFilter:self.tableSearchBar.text withSectionType:monthBirthSectionType];
     
 }
 
 #pragma mark - Methods
 
-- (void) generateSectionsInBackgroundFromArray:(NSArray*) array withFilter:(NSString*) filter {
+- (NSDate *)generateRandomDateWithinDaysBeforeSpecDay:(NSUInteger)daysBack {
+    
+    NSUInteger day = arc4random_uniform((u_int32_t)daysBack);  // explisit cast
+    NSUInteger hour = arc4random_uniform(23);
+    NSUInteger minute = arc4random_uniform(59);
+    
+    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    [comps setDay:31];
+    [comps setMonth:12];
+    [comps setYear:2010];
+    NSDate *dateTo = [[NSCalendar currentCalendar] dateFromComponents:comps];
+    
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    
+    NSDateComponents *offsetComponents = [NSDateComponents new];
+    [offsetComponents setDay:(day * -1)];
+    [offsetComponents setHour:hour];
+    [offsetComponents setMinute:minute];
+    
+    NSDate *randomDate = [gregorian dateByAddingComponents:offsetComponents
+                                                    toDate:dateTo
+                                                   options:0];
+    
+    return randomDate;
+    
+}
+
+- (NSDictionary *)JSONFromFile
+{
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"datanames" ofType:@"json"];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    return [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+}
+
+- (void) generateSectionsInBackgroundFromArray:(NSArray*) array withFilter:(NSString*) filter withSectionType:(StudentSectionType) sectionType {
     
     self.queue = [NSOperationQueue new];
     
@@ -56,7 +129,7 @@
     
     self.currentOperation = [NSBlockOperation blockOperationWithBlock:^{
         
-        NSMutableArray* sectionsArray = [[NSMutableArray alloc] initWithArray:[weakSelf generateSectionsFromArray:array withFilter:filter]];
+        NSMutableArray* sectionsArray = [[NSMutableArray alloc] initWithArray:[weakSelf generateSectionsFromArray:array withFilter:filter withSectionType:sectionType]];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             weakSelf.sectionsArray = sectionsArray;
@@ -73,41 +146,55 @@
     
 }
 
-- (NSArray*) generateSectionsFromArray:(NSArray*) array withFilter:(NSString*) filter {
+- (NSArray*) generateSectionsFromArray:(NSArray*) array withFilter:(NSString*) filter withSectionType:(StudentSectionType) sectionType {
     
-    NSString* currentLetter = nil;
+    [self sortMainStudentsArrBySectionType:sectionType];
+    
+    NSString* currentSectionName= nil;
+    NSString* sectionName = nil;
     Section* currentSection = nil;
     
     NSMutableArray* sectionsArray = [[NSMutableArray alloc] init];
     
-    for (NSString* string in array) {
+    for (Student* student in array) {
         
         if (![filter isEqualToString:@""]) {
-            if ([string rangeOfString:filter].location == NSNotFound) {
+            if ([student.firstName rangeOfString:filter].location == NSNotFound && [student.lastName rangeOfString:filter].location == NSNotFound) {
                 continue;
             }
         }
         
-        NSString* firstLetter = [string substringToIndex:1];
+        if (sectionType == nameSectionType) {
+            sectionName = [student.firstName substringToIndex:1];
+        } else if (sectionType == lastNameSectionType) {
+            sectionName = [student.lastName substringToIndex:1];
+        } else if (sectionType == monthBirthSectionType) {
+            sectionName = student.strBirthMonth;
+        }
         
-        if (![currentLetter isEqualToString:firstLetter]) {
+        if (![currentSectionName isEqualToString:sectionName]) {
             
             if (currentSection)
                 [sectionsArray addObject:currentSection];
             
-            Section* letterSection = [[Section alloc] init];
-            letterSection.sectionName = firstLetter;
-            [letterSection.nameArr addObject:string];
+            Section* newSection = [[Section alloc] init];
+            newSection.sectionName = sectionName;
             
-            currentSection = letterSection;
+            if (sectionType == monthBirthSectionType) {
+                newSection.indexSectionForDate = student.birthMonth;
+            }
+            
+            [newSection.studentsArr addObject:student];
+            
+            currentSection = newSection;
             
         } else {
             
-            [currentSection.nameArr addObject:string];
+            [currentSection.studentsArr addObject:student];
             
         }
         
-        currentLetter = firstLetter;
+        currentSectionName = sectionName;
         
     }
     
@@ -118,6 +205,58 @@
     
 }
 
+- (void) sortMainStudentsArrBySectionType:(StudentSectionType) sectionType {
+    
+    if (sectionType == monthBirthSectionType) {
+        
+        [self.studentsArray sortUsingDescriptors:@[
+            [NSSortDescriptor sortDescriptorWithKey:@"birthMonth" ascending:YES],
+            [NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES],
+            [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES]
+        ]];
+        
+    } else if (sectionType == nameSectionType) {
+        
+        [self.studentsArray sortUsingDescriptors:@[
+            [NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES],
+            [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES],
+            [NSSortDescriptor sortDescriptorWithKey:@"birthDate" ascending:YES]
+        ]];
+        
+    } else if (sectionType == lastNameSectionType) {
+        
+        [self.studentsArray sortUsingDescriptors:@[
+            [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES],
+            [NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES],
+            [NSSortDescriptor sortDescriptorWithKey:@"birthDate" ascending:YES]
+        ]];
+        
+    }
+    
+}
+
+- (NSString*) getMonthAsStringFromDate:(NSDate*) birthDate {
+    
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+
+    [df setDateFormat:@"MMMM"];
+    NSString* myMonthString = [df stringFromDate:birthDate];
+    
+    return myMonthString;
+    
+}
+
+- (int) getMonthAsIntFromDate:(NSDate*) birthDate {
+    
+    NSCalendar* calendar = [NSCalendar currentCalendar];
+    NSDateComponents* components = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:birthDate];
+    
+    int month = (int)[components month]; //gives you month
+    
+    return month;
+    
+}
+
 #pragma mark - UITableViewSource
 
 - (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView {
@@ -125,7 +264,11 @@
     NSMutableArray* indexArr = [NSMutableArray array];
     
     for (Section* letterSection in self.sectionsArray) {
-        [indexArr addObject:letterSection.sectionName];
+        if (self.currentSectionType == monthBirthSectionType) {
+            [indexArr addObject:[NSString stringWithFormat:@"%d", letterSection.indexSectionForDate]];
+        } else {
+            [indexArr addObject:[letterSection.sectionName substringToIndex:1]];
+        }
     }
     
     return indexArr;
@@ -142,7 +285,7 @@
     
     Section* currentSection = [self.sectionsArray objectAtIndex:section];
     
-    return [currentSection.nameArr count];
+    return [currentSection.studentsArr count];
     
 }
 
@@ -156,20 +299,32 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString* identifier = @"Cell";
+    static NSString* identifier = @"studentIdentifier";
     
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    StudentCell* cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        cell = [[StudentCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    
+        
     Section* currentSection = [self.sectionsArray objectAtIndex:indexPath.section];
-    NSString* name = [currentSection.nameArr objectAtIndex:indexPath.row];
+    Student* student = [currentSection.studentsArr objectAtIndex:indexPath.row];
     
-    cell.textLabel.text = name;
+    cell.nameLabel.text = [NSString stringWithFormat:@"%@ %@", student.firstName, student.lastName];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"dd.MM.yyyy"];
+    
+    cell.birthLabel.text = [formatter stringFromDate:student.birthDate];
     
     return cell;
+    
+}
+#pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    return 50.f;
     
 }
 
@@ -190,9 +345,26 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     
-    [self generateSectionsInBackgroundFromArray:self.namesArr withFilter:self.tableSearchBar.text];
+    [self generateSectionsInBackgroundFromArray:self.studentsArray withFilter:self.tableSearchBar.text withSectionType:self.currentSectionType];
     [self.tableView reloadData];
     
 }
 
+
+#pragma mark - Actions
+
+- (IBAction)sectionsChangeAction:(UISegmentedControl*)sender {
+    
+    if (sender.selectedSegmentIndex == 0) {
+        self.currentSectionType = nameSectionType;
+    } else if (sender.selectedSegmentIndex == 1) {
+        self.currentSectionType = lastNameSectionType;
+    } else if (sender.selectedSegmentIndex == 2) {
+        self.currentSectionType = monthBirthSectionType;
+    }
+    
+    [self generateSectionsInBackgroundFromArray:self.studentsArray withFilter:self.tableSearchBar.text withSectionType:self.currentSectionType];
+    [self.tableView reloadData];
+    
+}
 @end

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="SNG-6w-BHO">
-    <device id="retina4_0" orientation="portrait" appearance="light"/>
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -10,26 +10,49 @@
         <scene sceneID="teL-gC-sxL">
             <objects>
                 <tableViewController id="pgR-br-63G" customClass="ViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="8fu-Vz-AVH">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="50" estimatedRowHeight="50" sectionHeaderHeight="28" sectionFooterHeight="28" id="8fu-Vz-AVH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" id="8PH-vE-U3a">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <textInputTraits key="textInputTraits" autocorrectionType="no"/>
-                            <connections>
-                                <outlet property="delegate" destination="pgR-br-63G" id="JfL-mF-I6d"/>
-                            </connections>
-                        </searchBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="ObH-bk-a8G">
-                                <rect key="frame" x="0.0" y="84" width="320" height="43.5"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="studentIdentifier" id="ObH-bk-a8G" customClass="StudentCell">
+                                <rect key="frame" x="0.0" y="28" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ObH-bk-a8G" id="uxZ-8m-aYA">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="17.01.1986" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="quq-0t-2JD">
+                                            <rect key="frame" x="279" y="16.5" width="76" height="17"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="76" id="QhX-hw-e3b"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <color key="textColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Peter Pen" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="esg-Y7-fib">
+                                            <rect key="frame" x="15" y="4" width="254" height="42"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="42" id="Y0X-yG-J0b"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="quq-0t-2JD" secondAttribute="trailing" constant="20" id="1X8-2g-Ar3"/>
+                                        <constraint firstItem="quq-0t-2JD" firstAttribute="centerY" secondItem="uxZ-8m-aYA" secondAttribute="centerY" id="CoX-Cu-J55"/>
+                                        <constraint firstItem="esg-Y7-fib" firstAttribute="centerY" secondItem="uxZ-8m-aYA" secondAttribute="centerY" id="WBR-jU-Bxd"/>
+                                        <constraint firstItem="esg-Y7-fib" firstAttribute="leading" secondItem="uxZ-8m-aYA" secondAttribute="leading" constant="15" id="kXU-7N-9qH"/>
+                                        <constraint firstItem="quq-0t-2JD" firstAttribute="leading" secondItem="esg-Y7-fib" secondAttribute="trailing" constant="10" id="kfZ-3J-RkS"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="birthLabel" destination="quq-0t-2JD" id="htW-Ik-4ub"/>
+                                    <outlet property="nameLabel" destination="esg-Y7-fib" id="ETj-Cb-wWd"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -37,21 +60,40 @@
                             <outlet property="delegate" destination="pgR-br-63G" id="w29-4t-n4P"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Search" id="PbT-qU-nci"/>
+                    <navigationItem key="navigationItem" title="Search" id="PbT-qU-nci">
+                        <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="Gur-Em-OsM">
+                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="Mzb-YM-caS">
+                                <rect key="frame" x="246" y="5.5" width="113" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="FN"/>
+                                    <segment title="LN"/>
+                                    <segment title="BD"/>
+                                </segments>
+                                <connections>
+                                    <action selector="sectionsChangeAction:" destination="pgR-br-63G" eventType="valueChanged" id="V3z-yY-uKj"/>
+                                </connections>
+                            </segmentedControl>
+                            <connections>
+                                <action selector="sectionChangeAction:" destination="pgR-br-63G" id="8qV-Zz-uqs"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
-                        <outlet property="tableSearchBar" destination="8PH-vE-U3a" id="VMB-dV-vK2"/>
+                        <outlet property="sectionsSegmentCtrl" destination="Gur-Em-OsM" id="4gS-w8-Lwb"/>
+                        <outlet property="sectionsSegmentedCtrl" destination="Mzb-YM-caS" id="Eq8-Bh-a0t"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vCX-lz-NlF" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="913" y="72"/>
+            <point key="canvasLocation" x="911.25" y="71.83098591549296"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="HDe-c5-KSl">
             <objects>
                 <navigationController id="SNG-6w-BHO" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="J5q-rx-cvz">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
