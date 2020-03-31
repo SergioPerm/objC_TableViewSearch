@@ -10,7 +10,7 @@
 
 @interface ViewController : UITableViewController <UISearchBarDelegate>
 
-@property (strong, nonatomic) IBOutlet UISearchBar *tableSearchBar;
+@property (weak, nonatomic) IBOutlet UISearchBar *tableSearchBar;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *sectionsSegmentCtrl;
 
 - (IBAction)sectionsChangeAction:(UISegmentedControl*)sender;

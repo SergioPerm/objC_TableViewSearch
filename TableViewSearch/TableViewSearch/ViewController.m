@@ -42,11 +42,6 @@ typedef enum {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    
-    self.tableSearchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 320, 44)];
-    self.tableSearchBar.delegate = self;
-    self.tableView.tableHeaderView = self.tableSearchBar;
     
     self.studentsArray = [[NSMutableArray alloc] init];
     
@@ -59,8 +54,8 @@ typedef enum {
         NSArray* fullNameArr = [fullName componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
         Student* student = [[Student alloc] init];
-        student.firstName = [fullNameArr objectAtIndex:1];
-        student.lastName = [fullNameArr objectAtIndex:0];
+        student.firstName = [fullNameArr objectAtIndex:0];
+        student.lastName = [fullNameArr objectAtIndex:1];
         
         NSUInteger rndValue = 5 + arc4random() % ((365*25) - 5);
         
@@ -71,13 +66,7 @@ typedef enum {
         [self.studentsArray addObject:student];
         
     }
-              
-//    [self.studentsArray sortUsingDescriptors:@[
-//        [NSSortDescriptor sortDescriptorWithKey:@"firstName" ascending:YES],
-//        [NSSortDescriptor sortDescriptorWithKey:@"lastName" ascending:YES],
-//        [NSSortDescriptor sortDescriptorWithKey:@"birthDate" ascending:YES]
-//    ]];
-    
+                  
     self.currentSectionType = nameSectionType;
     [self generateSectionsInBackgroundFromArray:self.studentsArray withFilter:self.tableSearchBar.text withSectionType:monthBirthSectionType];
     
